@@ -1,3 +1,4 @@
+// https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
 #include <algorithm>
 #include <stdio.h>
 #include <omp.h>

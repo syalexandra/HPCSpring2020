@@ -1,3 +1,4 @@
+// https://developer.download.nvidia.com/assets/cuda/files/reduction.pdf
 #include <algorithm>
 #include <stdio.h>
 #include <omp.h>
@@ -23,7 +24,7 @@ void Check_CUDA_Error(const char *message){
 __global__ void reduction_kernel0(double* sum, const double* a, long N){
   __shared__ double smem[BLOCK_SIZE];
   int idx = (blockIdx.x) * blockDim.x + threadIdx.x;
-  
+
   // each thread reads data from global into shared memory
   if (idx < N) smem[threadIdx.x] = a[idx];
   else smem[threadIdx.x] = 0;
@@ -34,7 +35,7 @@ __global__ void reduction_kernel0(double* sum, const double* a, long N){
 		  smem[threadIdx.x] += smem[threadIdx.x + s];
 	  __syncthreads();
   }
-				 
+
   // write to global memory
   if (threadIdx.x == 0) sum[blockIdx.x] = smem[threadIdx.x];
 }
@@ -127,4 +128,3 @@ int main() {
 
   return 0;
 }
-
